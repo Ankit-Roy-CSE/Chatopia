@@ -1,0 +1,18 @@
+:root {
+  --dark : #161B33 ;
+  --light : #F1DAC4;
+  --primary-color: #70A0AF;
+  --secondary-color: #474973;
+  --text-color: #0D0C1D;
+  --bg-color: #ededed;
+}
+
+body {
+  /* background-color: var(--bg-color); */
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+  font-weight: 400;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
