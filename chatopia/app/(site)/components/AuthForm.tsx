@@ -14,8 +14,7 @@ import Input from '@/app/components/inputs/Input';
 import Button from '@/app/components/Button';
 import AuthSocialButton from "./AuthSocialButton";
 import { toast } from "react-hot-toast";
-import { useSession } from "next-auth/react";
-import { signIn } from "@/auth";
+import { useSession ,signIn } from "next-auth/react";
 import { useRouter } from "next/navigation";
 
 type Variant = 'LOGIN' | 'REGISTER'; // The two possible variants of the form
@@ -55,8 +54,15 @@ function AuthForm(){
         if (variant === 'REGISTER') {
           // Register the user
           axios.post('/api/register', data)
+          // Sign in the user after registration
           .then(() => signIn('credentials', data))
+          // If successful, show a toast
+          .then(() => toast.success('Registered successfully!'))
+          // Redirect to the users page
+          .then(() => router.push('/users'))
+          // If there's an error, show a toast
           .catch(() => toast.error('Something went wrong!'))
+          // Finally, set loading to false , so that user can submit the form again
           .finally(() => setIsLoading(false))
         }
     

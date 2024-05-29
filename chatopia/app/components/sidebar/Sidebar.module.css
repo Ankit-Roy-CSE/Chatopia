@@ -1,0 +1,14 @@
+.container{
+    height: 100%;
+}
+
+.container>main{
+    height: 100%;
+    background-color: aquamarine;
+}
+
+@media (min-width: 1024px){
+    .container>main{
+        padding-left: 5rem; 
+    }
+}
