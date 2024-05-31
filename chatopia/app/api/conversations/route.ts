@@ -50,6 +50,7 @@ export async function POST(request : Request){
             }
             });
             
+            
             return NextResponse.json(newConversation);
         }
 
@@ -101,6 +102,7 @@ export async function POST(request : Request){
 
         // If conversation exists , return the conversation
         if (singleConversation) {
+          console.log(singleConversation);
           return NextResponse.json(singleConversation);
         }
 
@@ -125,6 +127,7 @@ export async function POST(request : Request){
               }
         });
 
+        console.log(newConversation);
         return NextResponse.json(newConversation);
 
     }
