@@ -1,7 +1,7 @@
 import { useSession } from "next-auth/react";
 import { useMemo } from "react";
-import { FullConversationType , userConversation} from "../types";
-import { User } from "@prisma/client";
+import { FullConversationType , userConversation } from "../types";
+// import { UserConversation } from "@prisma/client";
 
 const useOtherUser = (conversation: 
     FullConversationType | {userConversations : userConversation[]}

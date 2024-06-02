@@ -1,0 +1,5 @@
+.wrapper{
+    background-color: antiquewhite;
+    overflow-y: auto; 
+    flex: 1 1 0%; 
+}
