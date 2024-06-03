@@ -8,6 +8,7 @@ import {
     useForm
   } from "react-hook-form";
 import { HiPaperAirplane, HiPhoto } from "react-icons/hi2";
+import { CldUploadButton } from "next-cloudinary";
 import MessageInput from "./MessageInput";
 import styles from "./Form.module.css"
 
@@ -47,7 +48,14 @@ const Form = () => {
 
     return (
         <div className={styles.wrapper}>
-            <HiPhoto size={30} className={styles.photoIcon} />
+            <CldUploadButton
+            className={styles.uploadContainer}
+              options={{ maxFiles: 1 }}
+              onSuccess={handleUpload}
+              uploadPreset="wuuk33fv"
+            >
+              <HiPhoto size={30} className={styles.photoIcon} />
+            </CldUploadButton>
             <form
             onSubmit={handleSubmit(onSubmit)}
             className={styles.form}

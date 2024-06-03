@@ -11,6 +11,10 @@
     background-color: #ffffff; 
 }
 
+.uploadContainer{
+    all: unset;
+}
+
 .photoIcon{
     color: rgb(14 165 233);
 }
