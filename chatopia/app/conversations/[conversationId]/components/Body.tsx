@@ -9,6 +9,9 @@ import { FullMessageType } from "@/app/types";
 import MessageBox from "./MessageBox";
 import styles from "./Body.module.css"
 
+import prisma from "@/app/libs/prismadb"
+import getCurrentUser from "@/app/actions/getCurrentUser";
+
 interface BodyProps {
     initialMessages: FullMessageType[]
 }

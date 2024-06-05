@@ -56,7 +56,13 @@ export async function POST(
       return NextResponse.json(conversation);
     }
 
-    // Update seen of last message
+    const seenIds = lastMessage.userSeenMessages.map((userSeenMsg) => userSeenMsg.user.id);
+    if (seenIds.indexOf(currentUser.id) !== -1) {
+      console.log("Current USER Already Seen")
+      return NextResponse.json(conversation);
+    }
+
+    // Update seen of last message if conversation is not seen already
     const updatedMessage = await prisma.message.update({
         // Extract the last message via its id
         where: {
@@ -83,6 +89,7 @@ export async function POST(
         }
     });
    
+
 
     return NextResponse.json(updatedMessage);
   } catch (error: any) {

@@ -8,6 +8,7 @@ import { useMemo, useState } from "react";
 import Link from "next/link";
 import { HiChevronLeft, HiEllipsisHorizontal } from "react-icons/hi2";
 import Avatar from "@/app/components/Avatar";
+import ProfileDrawer from "./ProfileDrawer";
 import styles from "./Header.module.css";
 
 
@@ -33,6 +34,11 @@ const Header: React.FC<HeaderProps> = ({conversation}) => {
 
     return (
         <>
+          <ProfileDrawer
+          data={conversation}
+          isOpen={drawerOpen}
+          onClose={() => setDrawerOpen(false)}
+        />
         <div className={styles.wrapper}>
             <div>
               <Link
