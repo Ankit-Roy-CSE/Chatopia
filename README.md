@@ -3,7 +3,7 @@
 -   Next.JS
 -   Node.JS
 -   Express.JS
--   Sockets.io
+-   Socket.io
 
 ## Goal
 
