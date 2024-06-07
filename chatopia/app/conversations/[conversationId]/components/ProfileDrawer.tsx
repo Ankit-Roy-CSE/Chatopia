@@ -6,14 +6,14 @@ import { userConversation } from "@/app/types";
 import { Fragment, useMemo, useState } from "react";
 
 import Avatar from "@/app/components/Avatar";
-import Modal from "@/app/components/Modal";
+// import Modal from "@/app/components/Modal";
 import { format } from "date-fns";
 import { IoClose, IoTrash } from "react-icons/io5";
 import { 
     Dialog, Transition , 
     TransitionChild , DialogPanel
 } from "@headlessui/react";
-// import ConfirmModal from "./ConfirmModal";
+import ConfirmModal from "./ConfirmModal";
 
 import styles from "./ProfileDrawer.module.css"
 
@@ -28,6 +28,7 @@ interface ProfileDrawerProps {
 const ProfileDrawer: React.FC<ProfileDrawerProps> =({isOpen, onClose, data})=>{
     const otherUser = useOtherUser(data);
     const [confirmOpen, setConfirmOpen] = useState(false);
+    // const [isModalOpen, setIsModalOpen] = useState(false);
 
     const joinedDate = useMemo(() => {
         return format(new Date(otherUser.createdAt), 'PP');
@@ -44,10 +45,13 @@ const ProfileDrawer: React.FC<ProfileDrawerProps> =({isOpen, onClose, data})=>{
         return 'Active';
     } , []);
 
+    
+
     return (
         <>
-        {/* {( isOpen && "Profile")} */}
-        {/* <Modal  isOpen onClose={()=>{}}/> */}
+        <ConfirmModal isOpen={confirmOpen} 
+        onClose={() => setConfirmOpen(false)}
+        />
         <Transition show={isOpen} as={Fragment}>
             <Dialog as="div" style={{
               position: 'relative',
@@ -172,7 +176,7 @@ const ProfileDrawer: React.FC<ProfileDrawerProps> =({isOpen, onClose, data})=>{
                 </div>
             </Dialog>
         </Transition>
-        </>
+      </>
     );
 }
 
