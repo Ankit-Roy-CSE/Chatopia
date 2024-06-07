@@ -10,12 +10,11 @@ import { HiChevronLeft, HiEllipsisHorizontal } from "react-icons/hi2";
 import Avatar from "@/app/components/Avatar";
 import ProfileDrawer from "./ProfileDrawer";
 import styles from "./Header.module.css";
+import { FullConversationType } from "@/app/types";
 
 
 interface HeaderProps {
-    conversation: Conversation & {
-      userConversations: userConversation[],
-    }
+    conversation: FullConversationType;
   };
 
 
@@ -48,7 +47,13 @@ const Header: React.FC<HeaderProps> = ({conversation}) => {
                 <HiChevronLeft size={32} />
               </Link>
 
-              <Avatar user={otherUser} />
+              {conversation.isGroup ? 
+            (
+            <Avatar group={conversation} />
+            )
+            :(
+            <Avatar user={otherUser} />
+            )}
               <div className={styles.textContainer}>
                 <div>
                   {conversation.name || otherUser.name}

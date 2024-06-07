@@ -129,10 +129,10 @@ const ProfileDrawer: React.FC<ProfileDrawerProps> =({isOpen, onClose, data})=>{
                                                 {data.isGroup && (
                                                   <div>
                                                     <dt className={styles.dtOne}>
-                                                      Emails
+                                                      Users
                                                     </dt>
                                                     <dd className={styles.ddOne}>
-                                                      {data.userConversations.map((userConversation) => userConversation.user.email).join(', ')}
+                                                      {data.userConversations.map((userConversation) => userConversation.user.name).join(', ')}
                                                     </dd>
                                                   </div>
                                                 )}

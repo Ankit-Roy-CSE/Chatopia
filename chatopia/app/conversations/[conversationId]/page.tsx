@@ -17,6 +17,8 @@ const ConversationId = async ({ params }: { params: IParams }) => {
     const conversation = await getConversationById(params.conversationId);
     const messages = await getMessages(params.conversationId);
 
+    
+
     if (!conversation) {
         return (
           <div className={styles.wrapper}>
@@ -30,7 +32,7 @@ const ConversationId = async ({ params }: { params: IParams }) => {
     return (
         <div className={styles.wrapper}>
             <div className={styles.container}>
-                <Header conversation={conversation} />
+                <Header conversation={ {...conversation , messages} } />
                 <Body initialMessages={messages} />
                 <Form />
             </div>
