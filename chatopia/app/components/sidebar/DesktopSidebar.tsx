@@ -8,7 +8,7 @@ import styles from "./DesktopSidebar.module.css";
 
 import Avatar from "../Avatar";
 import DesktopItem from "./DesktopItem";
-// import SettingsModal from "./SettingsModal"
+import SettingsModal from "./SettingsModal"
 
 
 interface DesktopSidebarProps {
@@ -25,6 +25,11 @@ const DesktopSidebar: React.FC<DesktopSidebarProps> = ({
 
     return (
         <>
+        <SettingsModal
+        currentUser={currentUser}
+        isOpen={isOpen}
+        onClose={() => setIsOpen(false)}
+        />
         <div className={styles.wrapper}>
             <nav className={styles.navbar}>
                 <ul role="list" className={styles.list}>
