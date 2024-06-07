@@ -26,8 +26,8 @@
 .msgInfo{
     display: flex; 
     gap: 0.25rem; 
-    /* align-items: center;  */
-    justify-content: center;
+    align-items: center; 
+    justify-content: flex-start;
 }
 
 .msgSender{

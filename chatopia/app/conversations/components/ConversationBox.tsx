@@ -92,7 +92,13 @@ const ConversationBox: React.FC<ConversationBoxProps> = ({
             selected ? styles.selected : styles.unselected
         )}
         >
+            {data.isGroup ? 
+            (
+            <Avatar group={data} />
+            )
+            :(
             <Avatar user={otherUser} />
+            )}
             <div className={styles.container}>
               <div>
                 <div className={styles.conversation}>

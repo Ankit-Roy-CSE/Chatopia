@@ -29,6 +29,7 @@ export async function POST(request : Request){
             data: {
                 name,
                 isGroup,
+                image: body.image || '/logo.png',
                 userConversations: {
                     create: [
                         // Connect the conversation to the current user

@@ -2,25 +2,25 @@
 
 import Image from "next/image";
 import { User } from "@prisma/client";
-// import useActiveList from "../hooks/useActiveList";
 import styles from "./Avatar.module.css";
+import { FullConversationType } from "@/app/types";
 
 interface AvatarProps {
   user?: User;
+  group?: FullConversationType;
 }
 
 const Avatar: React.FC<AvatarProps> = ({
-  user
+  user , group
 }) => {
 
     const isActive = true;
-
     return ( 
         <div className={styles.wrapper}>
             <div className={styles.container}>
                 <Image
                 alt="Avatar"
-                src={user?.image || '/logo.png'}
+                src={user?.image || group?.image || '/logo.png'}
                 fill
                 />
             </div>

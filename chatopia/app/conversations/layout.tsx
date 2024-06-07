@@ -16,6 +16,7 @@ export default async function ConversationsLayout({
       <div style={{height:"100vh"}}>
         <ConversationList
           initialItems={conversations}
+          users={users}
         />
         {children}
       </div>
