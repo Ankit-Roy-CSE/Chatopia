@@ -7,6 +7,7 @@ import { useCallback, useState } from "react";
 
 import Avatar from "@/app/components/Avatar";
 import styles from './UserBox.module.css';
+import LoadingModal from "@/app/components/LoadingModal";
 
 interface UserBoxProps {
     data: User
@@ -33,6 +34,8 @@ const UserBox: React.FC<UserBoxProps> = ({
     
 
     return (
+    <>
+        {isLoading && (<LoadingModal />)}
         <div className={styles.container} onClick={handleClick}>
           <Avatar user={data} />
           <div className={styles.userInfo}>
@@ -45,6 +48,7 @@ const UserBox: React.FC<UserBoxProps> = ({
             </div>
           </div>
         </div>
+    </>
     );
 }
 
