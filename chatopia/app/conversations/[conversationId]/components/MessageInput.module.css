@@ -1,11 +1,11 @@
 .wrapper{
+    display: flex;
     width: 100%;
     padding: 0.5rem; 
     border-radius: 9999px; 
     transition-property: background-color, border-color, color, fill, stroke, opacity, box-shadow, transform;
     transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
     transition-duration: 300ms; 
-
 }
 
 .wrapper:hover{

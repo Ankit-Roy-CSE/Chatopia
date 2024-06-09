@@ -1,7 +1,9 @@
 "use client"
 
 import { FieldErrors, FieldValues, UseFormRegister } from "react-hook-form";
+import {HiFaceSmile } from "react-icons/hi2";
 import styles from "./MessageInput.module.css";
+
 
 interface MessageInputProps {
     placeholder?: string;
@@ -11,7 +13,7 @@ interface MessageInputProps {
     register: UseFormRegister<FieldValues>;
     errors: FieldErrors
 }
-  
+
 
 const MessageInput: React.FC<MessageInputProps>  = ({
     placeholder,

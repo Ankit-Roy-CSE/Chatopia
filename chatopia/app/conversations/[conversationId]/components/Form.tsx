@@ -7,18 +7,24 @@ import {
     SubmitHandler, 
     useForm
   } from "react-hook-form";
-import { HiPaperAirplane, HiPhoto } from "react-icons/hi2";
+import { HiPaperAirplane, HiPhoto, HiFaceSmile } from "react-icons/hi2";
 import { CldUploadButton } from "next-cloudinary";
 import MessageInput from "./MessageInput";
 import styles from "./Form.module.css"
+import Picker from '@emoji-mart/react'
+import d from '@emoji-mart/data'
+import { useState , useRef } from "react";
+import Modal from "@/app/components/Modal"
 
 const Form = () => {
     const { conversationId } = useConversation();
+    const [isEmojiVisible, setIsEmojiVisible] = useState(false);
 
     const {
         register,
         handleSubmit,
         setValue,
+        watch,
         formState: {
           errors,
         }
@@ -28,8 +34,11 @@ const Form = () => {
         }
       });
 
+    const watchMsg = watch('message');
+
     const onSubmit: SubmitHandler<FieldValues> = (data) => {
         // Custom submit handler for adding messages to database
+
       setValue('message', '', { shouldValidate: true });
       
       axios.post('/api/messages', {
@@ -44,6 +53,11 @@ const Form = () => {
           conversationId
         })
     };
+
+    const handleEmojiSelect = (emoji: any) => {
+        const new_message = watchMsg + emoji.native;
+        setValue('message', new_message);
+    }
     
 
     return (
@@ -56,6 +70,15 @@ const Form = () => {
             >
               <HiPhoto size={30} className={styles.photoIcon} />
             </CldUploadButton>
+
+            <Modal isOpen={isEmojiVisible} onClose={()=>setIsEmojiVisible(false)}>
+                <Picker data={d} onEmojiSelect={handleEmojiSelect} />
+            </Modal>
+            
+            <button className={styles.emoji} onClick={()=>setIsEmojiVisible(true)}>
+                <HiFaceSmile size={24} />
+            </button>
+
             <form
             onSubmit={handleSubmit(onSubmit)}
             className={styles.form}
