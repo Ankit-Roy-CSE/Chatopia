@@ -61,6 +61,7 @@ const Body: React.FC<BodyProps> = ({ initialMessages }) => {
           const updatedMessage = res.data;
           socket.emit('message_seen', updatedMessage);
           console.log("Message Seen")
+          socket.emit('update_conversation', updatedMessage);
         });
       
         setMessages((current) =>{ 

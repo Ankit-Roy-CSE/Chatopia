@@ -58,7 +58,7 @@ export async function POST(request : Request){
         // If current conversation is a 1-to-1 conversation
 
         // Find conversations for currentUser
-    const currentUserConversations = await prisma.userConversation.findMany({
+      const currentUserConversations = await prisma.userConversation.findMany({
         where: {
           userId: currentUser.id
         },
@@ -104,7 +104,7 @@ export async function POST(request : Request){
         // If conversation exists , return the conversation
         if (singleConversation) {
           console.log(singleConversation);
-          return NextResponse.json(singleConversation);
+          return NextResponse.json({ type: 'existing' , conversation: singleConversation});
         }
 
         // If conversation does not exist , create a new conversation and return it
@@ -128,8 +128,8 @@ export async function POST(request : Request){
               }
         });
 
-        console.log(newConversation);
-        return NextResponse.json(newConversation);
+        // console.log(newConversation);
+        return NextResponse.json({ type: 'new' , conversation: newConversation});
 
     }
     catch(error: any){

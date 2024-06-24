@@ -8,6 +8,7 @@ import { useCallback, useState } from "react";
 import Avatar from "@/app/components/Avatar";
 import styles from './UserBox.module.css';
 import LoadingModal from "@/app/components/LoadingModal";
+import {socket} from "@/socket";
 
 interface UserBoxProps {
     data: User
@@ -26,8 +27,11 @@ const UserBox: React.FC<UserBoxProps> = ({
         axios.post('/api/conversations', { 
           userId: data.id
         })
-        .then((data) => {
-          router.push(`/conversations/${data.data.id}`);
+        .then((res) => {
+          if(res.data.type === 'new'){
+            socket.emit('new_conversation', res.data.conversation);
+          }
+          router.push(`/conversations/${res.data.id}`);
         })
         .finally(() => setIsLoading(false));
       }, [data, router]);

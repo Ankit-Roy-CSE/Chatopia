@@ -40,6 +40,17 @@ app.prepare().then(() => {
         // console.log(message);
         io.to(message.conversationId).emit('update_message', message);
     })
+
+    socket.on("new_conversation", (conversation) => {
+      console.log(`New conversation created ${conversation.id}`);
+      // console.log(conversation);
+      io.emit("recv_new_conversation", conversation);
+    })
+
+    socket.on("update_conversation", (message) => {
+      console.log(`Conversation updated ${message.conversationId}`);
+      io.emit("recv_updated_conversation", message);
+    })
   
     socket.on('disconnect', () => {
       console.log(`User disconnected ${socket.id}`);
