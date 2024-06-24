@@ -13,8 +13,10 @@ import MessageInput from "./MessageInput";
 import styles from "./Form.module.css"
 import Picker from '@emoji-mart/react'
 import d from '@emoji-mart/data'
-import { useState , useRef } from "react";
-import Modal from "@/app/components/Modal"
+import React, { useState , useRef, useEffect } from "react";
+import Modal from "@/app/components/Modal";
+import {socket} from "@/socket";
+
 
 const Form = () => {
     const { conversationId } = useConversation();
@@ -40,11 +42,13 @@ const Form = () => {
         // Custom submit handler for adding messages to database
 
       setValue('message', '', { shouldValidate: true });
-      
       axios.post('/api/messages', {
         ...data,
         conversationId
       })
+      .then((response) => {
+        socket.emit('send_message', response.data);
+      });
     };
 
     const handleUpload = (result: any) => {
@@ -52,6 +56,7 @@ const Form = () => {
           image: result?.info?.secure_url,
           conversationId
         })
+        
     };
 
     const handleEmojiSelect = (emoji: any) => {

@@ -1,7 +1,7 @@
 import getCurrentUser from "@/app/actions/getCurrentUser";
 import { NextResponse } from "next/server";
 import prisma from "@/app/libs/prismadb";
-
+import { socket } from "@/socket";
 
 export async function POST(
   request: Request
@@ -79,7 +79,9 @@ export async function POST(
       }
     });
 
-    // const lastMessage = updatedConversation.messages[updatedConversation.messages.length - 1];
+    // Emit the new message to the conversation room
+    console.log('EMITTING_MESSAGE', newMessage);
+    // socket.emit('send_message', newMessage);
 
     return NextResponse.json(newMessage);
   } catch (error: any) {

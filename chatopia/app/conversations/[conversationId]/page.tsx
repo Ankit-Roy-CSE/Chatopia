@@ -1,7 +1,6 @@
 import getConversationById from "@/app/actions/getConversationById";
 import getMessages from "@/app/actions/getMessages";
 import EmptyState from "@/app/components/EmptyState";
-
 import styles from "./styles.module.css"
 
 import Header from "./components/Header";
