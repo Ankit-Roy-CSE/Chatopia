@@ -34,6 +34,12 @@ app.prepare().then(() => {
         console.log(message);
         io.to(message.conversationId).emit('receive_message', message);
     });
+
+    socket.on('message_seen', (message) => {
+        console.log(`Message seen in room ${message.conversationId}`);
+        // console.log(message);
+        io.to(message.conversationId).emit('update_message', message);
+    })
   
     socket.on('disconnect', () => {
       console.log(`User disconnected ${socket.id}`);

@@ -43,8 +43,26 @@ const Body: React.FC<BodyProps> = ({ initialMessages }) => {
 
     // Body component will listen for new messages and update the state whenever a new message is received through the socket
     useEffect(() => {
+
+      const updateMessageHandler = (newMessage: FullMessageType) => {
+        setMessages((current) => current.map((currentMessage) => {
+          if (currentMessage.id === newMessage.id) {
+            return newMessage;
+          }
+  
+          return currentMessage;
+        }));
+      }
+
       const messageHandler = (message: FullMessageType) => {
-        axios.post(`/api/conversations/${conversationId}/seen`)
+        axios
+        .post(`/api/conversations/${conversationId}/seen`)
+        .then((res) => {
+          const updatedMessage = res.data;
+          socket.emit('message_seen', updatedMessage);
+          console.log("Message Seen")
+        });
+      
         setMessages((current) =>{ 
           if(find(current, {id: message.id})){
             return current;
@@ -55,6 +73,7 @@ const Body: React.FC<BodyProps> = ({ initialMessages }) => {
       };
 
       socket.on('receive_message', messageHandler);
+      socket.on('update_message', updateMessageHandler);
   
       // Remove event listener on component unmount
       return () => socket.off('receive_message', messageHandler);

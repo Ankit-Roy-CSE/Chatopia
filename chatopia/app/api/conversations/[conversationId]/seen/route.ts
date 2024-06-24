@@ -88,9 +88,7 @@ export async function POST(
             }
         }
     });
-   
-
-
+    console.log("Message Seen :" , updatedMessage)
     return NextResponse.json(updatedMessage);
   } catch (error: any) {
     console.log(error, 'ERROR_MESSAGES_SEEN');
