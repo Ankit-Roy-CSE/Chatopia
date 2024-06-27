@@ -5,7 +5,7 @@ import axios from "axios";
 
 import useConversation from "@/app/hooks/useConversation";
 import { FullMessageType } from "@/app/types";
-
+import { useRouter } from "next/navigation";
 import MessageBox from "./MessageBox";
 import styles from "./Body.module.css"
 
@@ -20,6 +20,8 @@ interface BodyProps {
 }
 
 const Body: React.FC<BodyProps> = ({ initialMessages }) => {
+
+    const router = useRouter();
 
     const [messages, setMessages] = useState(initialMessages);
     const bottomRef = useRef<HTMLDivElement>(null); //to scroll to bottom of latest messages
@@ -56,7 +58,7 @@ const Body: React.FC<BodyProps> = ({ initialMessages }) => {
             const updatedMessage = res.data.message;
             socket.emit('message_seen', updatedMessage);
             // console.log("Message Seen")
-            // socket.emit('update_conversation', updatedMessage);
+            socket.emit('update_conversation', updatedMessage);
           }
           
         });
@@ -74,6 +76,13 @@ const Body: React.FC<BodyProps> = ({ initialMessages }) => {
         }
       };
 
+      const deleteMsgHandler = (convId: string) => {
+        // Deletes all messages from the current conversation, if its ID matches the conversation ID received from the server
+        if(conversationId === convId){
+          router.push('/conversations');
+          router.refresh();
+        }
+      }
 
       // Mark current conversation as seen
       axios.post(`/api/conversations/${conversationId}/seen` , {signal})
@@ -88,6 +97,7 @@ const Body: React.FC<BodyProps> = ({ initialMessages }) => {
 
       socket.on('receive_message', messageHandler);
       socket.on('update_message', updateMessageHandler);
+      socket.on('delete_messages' , deleteMsgHandler);
 
       return () => {
         controller.abort();

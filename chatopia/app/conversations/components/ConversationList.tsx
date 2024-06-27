@@ -14,6 +14,7 @@ import {socket} from "@/socket";
 import { find } from "lodash";
 
 import styles from "./ConversationList.module.css";
+import { join } from "path";
 
 interface ConversationListProps {
     initialItems: FullConversationType[];
@@ -45,7 +46,13 @@ const ConversationList: React.FC<ConversationListProps> = ({
         const updateConversationHandler = ( message: FullMessageType) => {
             setItems((current) => current.map((currentConversation) => {
                 // For each conversation, check if the message belongs to the conversation
-                if (currentConversation.id === message.conversationId && currentConversation.messages.length > 0) {
+                if(!currentConversation.messages && currentConversation.id === message.conversationId){
+                    return {
+                        ...currentConversation,
+                        messages: [message],
+                    }
+                }
+                if (currentConversation.messages && currentConversation.id === message.conversationId) {
                     // If the message belongs to the conversation, update the messages array to include the new message
                     const updated_messages = [...currentConversation.messages, message];
                     return {
@@ -67,7 +74,13 @@ const ConversationList: React.FC<ConversationListProps> = ({
                 }
                 return [conversation, ...current];
             });
+            joinRoom(conversation.id, socket);
         };
+
+        const deleteConversationHandler = (conversationId: string) => {
+            setItems((current) => current.filter((item) => item.id !== conversationId));
+            socket.emit('leave_room', conversationId);
+        }
 
         // Updates the conversation list when a new or updated message is received
         socket.on('recv_updated_conversation', updateConversationHandler);
@@ -76,19 +89,18 @@ const ConversationList: React.FC<ConversationListProps> = ({
         socket.on('recv_new_conversation', newConversationHandler);
 
         // Updates the conversation list when an existing conversation is deleted
-        socket.on('recv_deleted_conversation', (conversationId: string) => {
-            setItems((current) => current.filter((item) => item.id !== conversationId));
-        });
+        socket.on('recv_deleted_conversation', deleteConversationHandler);
 
         return () => {
             socket.off('recv_updated_conversation', updateConversationHandler);
             socket.off('recv_new_conversation', newConversationHandler)
+            socket.off('recv_deleted_conversation' , deleteConversationHandler);
 
             items.forEach((item) => {
                 socket.emit('leave_room', item.id);
             });
         }
-    }, [items]);
+    }, []);
 
     return (
         <>
