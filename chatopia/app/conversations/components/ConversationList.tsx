@@ -43,11 +43,9 @@ const ConversationList: React.FC<ConversationListProps> = ({
 
         // To update the conversation list when a new message or message updation (like seen status) is received
         const updateConversationHandler = ( message: FullMessageType) => {
-            const didUpdate = false ;
-            
             setItems((current) => current.map((currentConversation) => {
                 // For each conversation, check if the message belongs to the conversation
-                if (currentConversation.id === message.conversationId) {
+                if (currentConversation.id === message.conversationId && currentConversation.messages.length > 0) {
                     // If the message belongs to the conversation, update the messages array to include the new message
                     const updated_messages = [...currentConversation.messages, message];
                     return {
@@ -76,6 +74,11 @@ const ConversationList: React.FC<ConversationListProps> = ({
 
         // Updates the conversation list when a new conversation is created
         socket.on('recv_new_conversation', newConversationHandler);
+
+        // Updates the conversation list when an existing conversation is deleted
+        socket.on('recv_deleted_conversation', (conversationId: string) => {
+            setItems((current) => current.filter((item) => item.id !== conversationId));
+        });
 
         return () => {
             socket.off('recv_updated_conversation', updateConversationHandler);

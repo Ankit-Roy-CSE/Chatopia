@@ -50,6 +50,12 @@ app.prepare().then(() => {
       console.log(`Conversation updated ${message.conversationId}`);
       io.emit("recv_updated_conversation", message);
     })
+
+    // Deletes the conversation from Conversation List
+    socket.on("delete_conversation", (conversationId) => {
+      console.log(`Conversation deleted ${conversationId}`);
+      io.emit("recv_deleted_conversation", conversationId);
+    })
   
     socket.on('disconnect', () => {
       console.log(`User disconnected ${socket.id}`);

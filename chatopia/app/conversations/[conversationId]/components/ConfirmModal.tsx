@@ -10,6 +10,7 @@ import { useRouter } from "next/navigation";
 import { useCallback, useState } from "react";
 import axios from "axios";
 import { toast } from "react-hot-toast";
+import {socket} from "@/socket";
 
 interface ConfirmModalProps {
     isOpen?: boolean;
@@ -27,6 +28,7 @@ const ConfirmModal: React.FC<ConfirmModalProps> = ({isOpen, onClose}) => {
     
         axios.delete(`/api/conversations/${conversationId}`)
         .then(() => {
+          socket.emit('delete_conversation', conversationId);
           onClose();
           router.push('/conversations');
           router.refresh();
