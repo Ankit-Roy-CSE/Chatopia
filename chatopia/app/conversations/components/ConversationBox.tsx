@@ -29,7 +29,7 @@ const ConversationBox: React.FC<ConversationBoxProps> = ({
       const router = useRouter();
 
       const handleClick = useCallback(() => {
-          // Redirecting to the conversation page
+          // Redirecting to the corresponding conversation page
           router.push(`/conversations/${data.id}`);
       }, [data.id, router]);
     

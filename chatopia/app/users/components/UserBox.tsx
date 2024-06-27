@@ -31,7 +31,7 @@ const UserBox: React.FC<UserBoxProps> = ({
           if(res.data.type === 'new'){
             socket.emit('new_conversation', res.data.conversation);
           }
-          router.push(`/conversations/${res.data.id}`);
+          router.push(`/conversations/${res.data.conversation.id}`);
         })
         .finally(() => setIsLoading(false));
       }, [data, router]);

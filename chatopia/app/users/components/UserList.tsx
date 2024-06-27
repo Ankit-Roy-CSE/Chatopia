@@ -9,9 +9,7 @@ interface UserListProps {
   items: User[]
 };
 
-const UserList: React.FC<UserListProps> = ({
-    items
-  }) => {
+const UserList: React.FC<UserListProps> = ({items}) => {
   
     return (
         <aside className={styles.wrapper}>

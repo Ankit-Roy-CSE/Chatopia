@@ -9,10 +9,11 @@ import { FullMessageType } from "@/app/types";
 import MessageBox from "./MessageBox";
 import styles from "./Body.module.css"
 
-import prisma from "@/app/libs/prismadb"
-import getCurrentUser from "@/app/actions/getCurrentUser";
+// import prisma from "@/app/libs/prismadb"
+// import getCurrentUser from "@/app/actions/getCurrentUser";
 import { socket } from "@/socket";
-import { find } from "lodash";
+import { find, update } from "lodash";
+import { abort } from "process";
 
 interface BodyProps {
     initialMessages: FullMessageType[],
@@ -25,63 +26,75 @@ const Body: React.FC<BodyProps> = ({ initialMessages }) => {
 
     const { conversationId } = useConversation();
 
-    useEffect(() => {
-        const joinRoom = (room : string , socket : any ) => {
-          if (room !== '') {
-            socket.emit('join_room', room );
-          }
-        }
-        console.log("Form Socket" , socket.id);
-        joinRoom(conversationId , socket);
-
-        return () => {
-          socket.emit('leave_room', conversationId);
-        }
-      }
-      ,[]);
-  
-
     // Body component will listen for new messages and update the state whenever a new message is received through the socket
-    useEffect(() => {
 
+    useEffect(() => {
+      const controller = new AbortController();
+      const signal = controller.signal;
+
+      // Update the message receive in the current message
       const updateMessageHandler = (newMessage: FullMessageType) => {
-        setMessages((current) => current.map((currentMessage) => {
-          if (currentMessage.id === newMessage.id) {
-            return newMessage;
-          }
-  
-          return currentMessage;
-        }));
+        // Update the message in the state only if the message belongs to the current conversation
+        if(newMessage.conversationId === conversationId){
+          setMessages((current) => current.map((currentMessage) => {
+            if (currentMessage.id === newMessage.id) {
+              return newMessage;
+            }
+
+            return currentMessage;
+          }));
+        }
+        socket.emit('update_conversation', newMessage);
       }
 
       const messageHandler = (message: FullMessageType) => {
+        // Mark message received as seen , and update sidebar
         axios
         .post(`/api/conversations/${conversationId}/seen`)
         .then((res) => {
-          const updatedMessage = res.data;
-          socket.emit('message_seen', updatedMessage);
-          console.log("Message Seen")
-          socket.emit('update_conversation', updatedMessage);
-        });
-      
-        setMessages((current) =>{ 
-          if(find(current, {id: message.id})){
-            return current;
+          if(res.data.type === "message"){
+            const updatedMessage = res.data.message;
+            socket.emit('message_seen', updatedMessage);
+            // console.log("Message Seen")
+            // socket.emit('update_conversation', updatedMessage);
           }
-          return [...current, message]}
-        );
-        bottomRef.current?.scrollIntoView({ behavior: 'smooth' });
+          
+        });
+
+        // Render received message from server only if it belongs to the current conversation
+        if(message.conversationId === conversationId){
+          // Add the new message to the state
+          setMessages((current) =>{ 
+            if(find(current, {id: message.id})){
+              return current;
+            }
+            return [...current, message]}
+          );
+          bottomRef.current?.scrollIntoView({ behavior: 'smooth' });
+        }
       };
+
+
+      // Mark current conversation as seen
+      axios.post(`/api/conversations/${conversationId}/seen` , {signal})
+      .then((res) => {
+        console.log(res.data);
+        if(res.data.type === "message"){
+          const updatedMessage = res.data.message;
+          socket.emit('message_seen', updatedMessage);
+        }
+      });
+
 
       socket.on('receive_message', messageHandler);
       socket.on('update_message', updateMessageHandler);
-  
-      // Remove event listener on component unmount
-      return () => socket.off('receive_message', messageHandler);
-    }, [conversationId, socket]);
 
-    useEffect(() => {
-        axios.post(`/api/conversations/${conversationId}/seen`)
+      return () => {
+        controller.abort();
+        socket.off('receive_message', messageHandler);
+        socket.off('update_message', updateMessageHandler);
+      }
+        
       }, [conversationId]);
 
     return (
