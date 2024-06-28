@@ -46,7 +46,13 @@ export default { providers: [
           if (!isCorrectPassword) {
             throw new Error('Invalid credentials');
           }
-  
+
+          // // Add a new record to the Active table with the user's ID
+          // await prisma.active.create({
+          //   data: {
+          //     id: user.id,
+          //   }
+          // });
           return user;
         }
       })

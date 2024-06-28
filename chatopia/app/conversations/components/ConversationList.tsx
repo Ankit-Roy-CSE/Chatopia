@@ -12,6 +12,8 @@ import ConversationBox from "./ConversationBox";
 import GroupChatModal from "./GroupChatModal";
 import {socket} from "@/socket";
 import { find } from "lodash";
+import getActiveList from "@/app/actions/getActiveList";
+import axios from "axios";
 
 import styles from "./ConversationList.module.css";
 import { join } from "path";
@@ -25,13 +27,23 @@ const ConversationList: React.FC<ConversationListProps> = ({
     initialItems,users
 }) => {
     const session = useSession();
+    const [ activeList , setActiveList ] = useState([]);
     const [items, setItems] = useState(initialItems);
     const [isModalOpen, setIsModalOpen] = useState(false);
+
+    const userEmail = useMemo(() => {
+        return session.data?.user?.email;
+      }, [session.data?.user?.email]);
 
     const router = useRouter();
     const { conversationId, isOpen } = useConversation();
 
     useEffect(() => {
+        axios.get('/api/socket')
+        .then((res) => {
+            setActiveList(res.data);
+        })
+
         const joinRoom = (room : string , socket : any ) => {
             if (room !== '') {
               socket.emit('join_room', room );
@@ -95,6 +107,18 @@ const ConversationList: React.FC<ConversationListProps> = ({
         // Updates the conversation list when an existing conversation is deleted
         socket.on('recv_deleted_conversation', deleteConversationHandler);
 
+        socket.on('connect', () => {
+            if(userEmail)
+                axios.post('/api/socket/online', { email: userEmail });
+        });
+
+        socket.on('disconnect', () => {
+            if(!socket.active && userEmail){
+                // POST request which passes the user id to the server
+                axios.post('/api/socket/offline', { email: userEmail });
+            }
+        });
+
         return () => {
             socket.off('recv_updated_conversation', updateConversationHandler);
             socket.off('recv_new_conversation', newConversationHandler)
@@ -132,6 +156,7 @@ const ConversationList: React.FC<ConversationListProps> = ({
                     key={item.id}
                     data={item}
                     selected={conversationId === item.id}
+                    activeList={activeList}
                     />
                 ))}
             </div>
