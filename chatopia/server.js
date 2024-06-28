@@ -30,24 +30,24 @@ app.prepare().then(() => {
     });
 
     socket.on('send_message', (message) => {
-        console.log(`Message sent to room ${message.conversationId}`);
+        // console.log(`Message sent to room ${message.conversationId}`);
         io.to(message.conversationId).emit('receive_message', message);
     });
 
     socket.on('message_seen', (message) => {
-        console.log(`Message seen in room ${message.conversationId}`);
+        // console.log(`Message seen in room ${message.conversationId}`);
         io.to(message.conversationId).emit('update_message', message);
     })
 
     // Creates a new conversation in Conversation List
     socket.on("new_conversation", (conversation) => {
-      console.log(`New conversation created ${conversation.id}`);
+      // console.log(`New conversation created ${conversation.id}`);
       io.emit("recv_new_conversation", conversation);
     })
 
     // Adds a new message to the conversation in Conversation List
     socket.on("update_conversation", (message) => {
-      console.log(`Conversation updated ${message.conversationId}`);
+      // console.log(`Conversation updated ${message.conversationId}`);
       io.emit("recv_updated_conversation", message);
     })
 

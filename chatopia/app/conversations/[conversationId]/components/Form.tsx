@@ -48,7 +48,8 @@ const Form = () => {
       })
       .then((response) => {
         socket.emit('send_message', response.data);
-        // socket.emit('update_conversation', response.data);
+        console.log(response.data);
+        socket.emit('update_conversation', response.data);
       });
     };
 
