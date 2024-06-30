@@ -9,10 +9,14 @@ import {
 import { signOut } from "next-auth/react";
 import { socket } from "@/socket";
 import useConversation from "./useConversation";
+import axios from "axios";
+import { useSession } from "next-auth/react";
 
 const useRoutes = () => {
   const pathname = usePathname();
   const { conversationId } = useConversation();
+
+  const session = useSession();
 
   const routes = useMemo(() => [
     {
@@ -31,6 +35,7 @@ const useRoutes = () => {
       label: 'Logout',
       href: '#',
       onClick: () => {
+        axios.post('/api/socket/offline', { email: session?.data?.user?.email });
         socket.disconnect();
         signOut();
       },
