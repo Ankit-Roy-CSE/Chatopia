@@ -28,6 +28,10 @@ const ConversationList: React.FC<ConversationListProps> = ({
     const [items, setItems] = useState(initialItems);
     const [isModalOpen, setIsModalOpen] = useState(false);
 
+    const userEmail = useMemo(() => {
+        return session.data?.user?.email;
+      }, [session.data?.user?.email]);
+
     const router = useRouter();
     const { conversationId, isOpen } = useConversation();
 
@@ -93,18 +97,15 @@ const ConversationList: React.FC<ConversationListProps> = ({
 
         socket.on('connect', () => {
             if(userEmail)
-                console.log("Connected :" , userEmail);
                 axios.post('/api/socket/online', { email: userEmail });
         });
-        
+
         socket.on('disconnect', () => {
             if(!socket.active && userEmail){
-                console.log("Disconnected :" , userEmail);
                 // POST request which passes the user id to the server
-                // axios.post('/api/socket/offline', { email: userEmail });
+                axios.post('/api/socket/offline', { email: userEmail });
             }
         });
-
 
         return () => {
             socket.off('recv_updated_conversation', updateConversationHandler);
