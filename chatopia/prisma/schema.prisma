@@ -139,8 +139,3 @@ model Account {
 
   @@unique([provider, providerAccountId])
 }
-
-model Active {
-  id String @id @db.Uuid
-  email String? @unique
-}

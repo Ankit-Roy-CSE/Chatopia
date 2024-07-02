@@ -9,7 +9,7 @@ const port = 3000;
 const app = next({ dev, hostname, port });
 const handler = app.getRequestHandler();
 
-const activeUsers = []
+// const io = null;
 
 app.prepare().then(() => {
   const httpServer = createServer(handler);
@@ -18,7 +18,6 @@ app.prepare().then(() => {
 
   io.on("connection", (socket) => {
     console.log(`User connected ${socket.id}`);
-    
 
     socket.on('join_room',(conversationId) => {
         console.log(`User joined room ${conversationId}`);

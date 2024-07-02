@@ -1,4 +1,3 @@
-"use client";
 import { useMemo } from "react";
 import { usePathname } from "next/navigation";
 import { HiChat } from "react-icons/hi";
@@ -7,7 +6,7 @@ import {
   HiUsers
 } from "react-icons/hi2";
 import { signOut } from "next-auth/react";
-import { socket } from "@/socket";
+
 import useConversation from "./useConversation";
 import axios from "axios";
 import { useSession } from "next-auth/react";
@@ -34,11 +33,7 @@ const useRoutes = () => {
     {
       label: 'Logout',
       href: '#',
-      onClick: () => {
-        axios.post('/api/socket/offline', { email: session?.data?.user?.email });
-        socket.disconnect();
-        signOut();
-      },
+      onClick: () => signOut(),
       icon: HiArrowLeftOnRectangle
     }
   ], [pathname, conversationId]);
