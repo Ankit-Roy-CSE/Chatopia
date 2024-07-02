@@ -96,7 +96,7 @@ const ConversationBox: React.FC<ConversationBoxProps> = ({ data, selected , acti
         >
             {data.isGroup ? 
             (
-            <Avatar group={data} />
+            <Avatar group={data} isActive = {false} />
             )
             :(
             <Avatar user={otherUser} isActive = {isActive} />

@@ -110,7 +110,7 @@ const ConversationList: React.FC<ConversationListProps> = ({
         socket.on('connect', () => {
             if(userEmail)
                 console.log("Connected :" , userEmail);
-                axios.post('/api/socket/online', { email: userEmail });
+                // axios.post('/api/socket/online', { email: userEmail });
         });
         
         socket.on('disconnect', () => {
