@@ -80,7 +80,8 @@ export async function POST(
     });
 
     // Emit the new message to the conversation room
-    // console.log('EMITTING_MESSAGE', newMessage);
+    console.log('EMITTING_MESSAGE', newMessage);
+    // socket.emit('send_message', newMessage);
 
     return NextResponse.json(newMessage);
   } catch (error: any) {

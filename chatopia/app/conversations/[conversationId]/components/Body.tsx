@@ -103,7 +103,6 @@ const Body: React.FC<BodyProps> = ({ initialMessages }) => {
         controller.abort();
         socket.off('receive_message', messageHandler);
         socket.off('update_message', updateMessageHandler);
-        socket.off('delete_messages', deleteMsgHandler)
       }
         
       }, [conversationId]);

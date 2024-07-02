@@ -44,30 +44,26 @@ const ConversationList: React.FC<ConversationListProps> = ({
 
         // To update the conversation list when a new message or message updation (like seen status) is received
         const updateConversationHandler = ( message: FullMessageType) => {
-            console.log("Message :" , message);
-            setItems((current) => {
-                return current.map((currentConversation) => {
-                    // For each conversation, check if the message belongs to the conversation
-                    console.log(currentConversation);
-                    if(!currentConversation.messages && currentConversation.id === message.conversationId){
-                        return {
-                            ...currentConversation,
-                            messages: [message],
-                        }
+            setItems((current) => current.map((currentConversation) => {
+                // For each conversation, check if the message belongs to the conversation
+                if(!currentConversation.messages && currentConversation.id === message.conversationId){
+                    return {
+                        ...currentConversation,
+                        messages: [message],
                     }
-                    if (currentConversation.messages && currentConversation.id === message.conversationId) {
-                        // If the message belongs to the conversation, update the messages array to include the new message
-                        const updated_messages = [...currentConversation.messages, message];
-                        return {
-                            ...currentConversation,
-                            messages: updated_messages,
-                        }
+                }
+                if (currentConversation.messages && currentConversation.id === message.conversationId) {
+                    // If the message belongs to the conversation, update the messages array to include the new message
+                    const updated_messages = [...currentConversation.messages, message];
+                    return {
+                        ...currentConversation,
+                        messages: updated_messages,
                     }
-                    // If the message does not belong to the conversation, return the conversation as is
-                    return currentConversation;
-                })
-            });
-        };
+                }
+                // If the message does not belong to the conversation, return the conversation as is
+                return currentConversation;
+            }));
+        }
 
         // To update the conversation list when a new conversation is created
         const newConversationHandler = (conversation: FullConversationType) => {
