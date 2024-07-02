@@ -91,6 +91,21 @@ const ConversationList: React.FC<ConversationListProps> = ({
         // Updates the conversation list when an existing conversation is deleted
         socket.on('recv_deleted_conversation', deleteConversationHandler);
 
+        socket.on('connect', () => {
+            if(userEmail)
+                console.log("Connected :" , userEmail);
+                axios.post('/api/socket/online', { email: userEmail });
+        });
+        
+        socket.on('disconnect', () => {
+            if(!socket.active && userEmail){
+                console.log("Disconnected :" , userEmail);
+                // POST request which passes the user id to the server
+                // axios.post('/api/socket/offline', { email: userEmail });
+            }
+        });
+
+
         return () => {
             socket.off('recv_updated_conversation', updateConversationHandler);
             socket.off('recv_new_conversation', newConversationHandler)
