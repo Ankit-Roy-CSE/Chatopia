@@ -139,3 +139,7 @@ model Account {
 
   @@unique([provider, providerAccountId])
 }
+
+// model Active {
+//   email String @id
+// }

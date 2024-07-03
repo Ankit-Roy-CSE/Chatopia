@@ -13,7 +13,7 @@ export async function POST(request : Request){
             }
         });
 
-        // DELETE the row from active table where id is the email
+        // CREATE the row from active table where id is the email
         if(user){
             await prisma.active.create({
                 data: {

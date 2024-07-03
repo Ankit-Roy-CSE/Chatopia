@@ -4,17 +4,20 @@ import Image from "next/image";
 import { User } from "@prisma/client";
 import styles from "./Avatar.module.css";
 import { FullConversationType } from "@/app/types";
+import { useEffect, useState } from "react";
+import {socket} from "@/socket"
 
 interface AvatarProps {
   user?: User;
   group?: FullConversationType;
+  isActive?: boolean;
 }
 
 const Avatar: React.FC<AvatarProps> = ({
-  user , group
+  user , group , isActive
 }) => {
 
-    const isActive = true;
+    const activeStatus = isActive ? true : false;
     return ( 
         <div className={styles.wrapper}>
             <div className={styles.container}>
@@ -24,7 +27,7 @@ const Avatar: React.FC<AvatarProps> = ({
                 fill
                 />
             </div>
-            <span className={styles.activeStatus}/>
+            {activeStatus && <span className={styles.activeStatus}/>}
         </div>
     );
 }

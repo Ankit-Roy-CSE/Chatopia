@@ -16,13 +16,15 @@ import useOtherUser from "@/app/hooks/useOtherUser";
 interface ConversationBoxProps {
     data: FullConversationType,
     selected?: boolean;
+    activeList: string [];
   }
 
 
   
 const ConversationBox: React.FC<ConversationBoxProps> = ({
   data,
-  selected
+  selected,
+  activeList
 }) => {
       const otherUser = useOtherUser(data)
       const session = useSession();
@@ -84,6 +86,11 @@ const ConversationBox: React.FC<ConversationBoxProps> = ({
         return "Started a conversation";
       }, [lastMessage]);
 
+      console.log("active list:" , activeList);
+      // const activeEmails = activeList.map((activeUser)=>activeUser.email );
+      // console.log("active emails:" , activeEmails);
+      const isActive = activeList.includes(otherUser.email);
+
     return (
         <div 
           onClick={handleClick}
@@ -97,7 +104,7 @@ const ConversationBox: React.FC<ConversationBoxProps> = ({
             <Avatar group={data} />
             )
             :(
-            <Avatar user={otherUser} />
+            <Avatar user={otherUser} isActive = {isActive}/>
             )}
             <div className={styles.container}>
               <div>

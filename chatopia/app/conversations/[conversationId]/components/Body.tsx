@@ -31,9 +31,6 @@ const Body: React.FC<BodyProps> = ({ initialMessages }) => {
     // Body component will listen for new messages and update the state whenever a new message is received through the socket
 
     useEffect(() => {
-      const controller = new AbortController();
-      const signal = controller.signal;
-
       // Update the message receive in the current message
       const updateMessageHandler = (newMessage: FullMessageType) => {
         // Update the message in the state only if the message belongs to the current conversation
@@ -85,7 +82,7 @@ const Body: React.FC<BodyProps> = ({ initialMessages }) => {
       }
 
       // Mark current conversation as seen
-      axios.post(`/api/conversations/${conversationId}/seen` , {signal})
+      axios.post(`/api/conversations/${conversationId}/seen`)
       .then((res) => {
         console.log(res.data);
         if(res.data.type === "message"){
@@ -100,9 +97,9 @@ const Body: React.FC<BodyProps> = ({ initialMessages }) => {
       socket.on('delete_messages' , deleteMsgHandler);
 
       return () => {
-        controller.abort();
         socket.off('receive_message', messageHandler);
         socket.off('update_message', updateMessageHandler);
+        socket.off('delete_messages', deleteMsgHandler)
       }
         
       }, [conversationId]);

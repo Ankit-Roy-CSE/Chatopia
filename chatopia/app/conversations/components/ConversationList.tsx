@@ -11,10 +11,11 @@ import { useSession } from "next-auth/react";
 import ConversationBox from "./ConversationBox";
 import GroupChatModal from "./GroupChatModal";
 import {socket} from "@/socket";
-import { find } from "lodash";
+import { find, set } from "lodash";
+import getActiveList from "@/app/actions/getActiveList";
+import axios from "axios";
 
 import styles from "./ConversationList.module.css";
-import { join } from "path";
 
 interface ConversationListProps {
     initialItems: FullConversationType[];
@@ -25,6 +26,7 @@ const ConversationList: React.FC<ConversationListProps> = ({
     initialItems,users
 }) => {
     const session = useSession();
+    const [ activeList , setActiveList ] = useState([]);
     const [items, setItems] = useState(initialItems);
     const [isModalOpen, setIsModalOpen] = useState(false);
 
@@ -36,6 +38,17 @@ const ConversationList: React.FC<ConversationListProps> = ({
     const { conversationId, isOpen } = useConversation();
 
     useEffect(() => {
+        socket.emit("new-user-add" , userEmail);
+        socket.on("get-users" , (users) => {
+            const userEmails = users.map((user:any) => user.userEmail);
+            setActiveList(userEmails);
+        });
+
+        // axios.get('/api/socket')
+        // .then((res) => {
+        //     setActiveList(res.data);
+        // })
+    
         const joinRoom = (room : string , socket : any ) => {
             if (room !== '') {
               socket.emit('join_room', room );
@@ -107,16 +120,52 @@ const ConversationList: React.FC<ConversationListProps> = ({
             }
         });
 
+
+        socket.on('connect', () => {
+            if(userEmail)
+                axios.post('/api/socket/online', { email: userEmail });
+        });
+
+        socket.on('disconnect', () => {
+            if(!socket.active && userEmail){
+                // POST request which passes the user id to the server
+                axios.post('/api/socket/offline', { email: userEmail });
+            }
+        });
+
+        // Tab has focus
+        const handleFocus = async () => {
+            socket.emit("new-user-add", userEmail);
+            socket.on("get-users" , (users) => {
+                const userEmails = users.map((user:any) => user.userEmail);
+                setActiveList(userEmails);
+            });
+        };
+    
+        // Tab closed
+        const handleBlur = () => {
+            if(userEmail) {
+                socket.emit("offline")   
+            }
+        };
+    
+        // Track if the user changes the tab to determine when they are online
+        window.addEventListener('focus', handleFocus);
+        window.addEventListener('blur', handleBlur);
+
         return () => {
             socket.off('recv_updated_conversation', updateConversationHandler);
             socket.off('recv_new_conversation', newConversationHandler)
             socket.off('recv_deleted_conversation' , deleteConversationHandler);
 
-            items.forEach((item) => {
-                socket.emit('leave_room', item.id);
-            });
+            // items.forEach((item) => {
+            //     socket.emit('leave_room', item.id);
+            // });
+
+            window.removeEventListener('focus', handleFocus);
+            window.removeEventListener('blur', handleBlur);
         }
-    }, []);
+    }, [userEmail]);
 
     return (
         <>
@@ -144,6 +193,7 @@ const ConversationList: React.FC<ConversationListProps> = ({
                     key={item.id}
                     data={item}
                     selected={conversationId === item.id}
+                    activeList={activeList}
                     />
                 ))}
             </div>

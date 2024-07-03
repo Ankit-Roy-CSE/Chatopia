@@ -7,7 +7,7 @@ import {
     SubmitHandler, 
     useForm
   } from "react-hook-form";
-import { HiPaperAirplane, HiPhoto, HiFaceSmile } from "react-icons/hi2";
+import { HiPaperAirplane, HiPhoto, HiFaceSmile , HiLink } from "react-icons/hi2";
 import { CldUploadButton } from "next-cloudinary";
 import MessageInput from "./MessageInput";
 import styles from "./Form.module.css"
@@ -21,6 +21,7 @@ import {socket} from "@/socket";
 const Form = () => {
     const { conversationId } = useConversation();
     const [isEmojiVisible, setIsEmojiVisible] = useState(false);
+    const [isAttachmentVisible , setIsAttachmentVisible] = useState(false);
 
     const {
         register,
@@ -48,7 +49,7 @@ const Form = () => {
       })
       .then((response) => {
         socket.emit('send_message', response.data);
-        // socket.emit('update_conversation', response.data);
+        socket.emit('update_conversation', response.data);
       });
     };
 
@@ -68,14 +69,23 @@ const Form = () => {
 
     return (
         <div className={styles.wrapper}>
-            <CldUploadButton
-            className={styles.uploadContainer}
-              options={{ maxFiles: 1 }}
-              onSuccess={handleUpload}
-              uploadPreset="wuuk33fv"
-            >
-              <HiPhoto size={30} className={styles.photoIcon} />
-            </CldUploadButton>
+            <Modal isOpen={isAttachmentVisible} onClose={()=>setIsAttachmentVisible(false)}>
+              <CldUploadButton
+              className={styles.uploadContainer}
+                options={{ maxFiles: 1 }}
+                onSuccess={handleUpload}
+                uploadPreset="wuuk33fv"
+              >
+                <HiPhoto size={30} className={styles.photoIcon} />
+                <span style={{display:"flex", justifyContent:"center" , alignItems:"center"}}> Image </span>
+              </CldUploadButton>
+            </Modal>
+
+            
+
+            <button className={styles.emoji} onClick={()=>setIsAttachmentVisible(true)}>
+                <HiLink size={24} />
+            </button>
 
             <Modal isOpen={isEmojiVisible} onClose={()=>setIsEmojiVisible(false)}>
                 <Picker data={d} onEmojiSelect={handleEmojiSelect} />
