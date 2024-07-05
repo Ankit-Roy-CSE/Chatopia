@@ -7,7 +7,7 @@ import {
     SubmitHandler, 
     useForm
   } from "react-hook-form";
-import { HiPaperAirplane, HiPhoto, HiFaceSmile , HiLink } from "react-icons/hi2";
+import { HiPaperAirplane, HiPhoto, HiFaceSmile , HiLink ,HiPlusCircle , HiXCircle} from "react-icons/hi2";
 import { CldUploadButton } from "next-cloudinary";
 import MessageInput from "./MessageInput";
 import styles from "./Form.module.css"
@@ -17,6 +17,7 @@ import React, { useState , useRef, useEffect } from "react";
 import Modal from "@/app/components/Modal";
 import {socket} from "@/socket";
 
+import { FileUpload } from 'primereact/fileupload';
 
 const Form = () => {
     const { conversationId } = useConversation();
@@ -33,7 +34,8 @@ const Form = () => {
         }
       } = useForm<FieldValues>({
         defaultValues: {
-          message: ''
+          message: '',
+          image: ''
         }
       });
 
@@ -70,15 +72,42 @@ const Form = () => {
     return (
         <div className={styles.wrapper}>
             <Modal isOpen={isAttachmentVisible} onClose={()=>setIsAttachmentVisible(false)}>
-              <CldUploadButton
-              className={styles.uploadContainer}
-                options={{ maxFiles: 1 }}
-                onSuccess={handleUpload}
-                uploadPreset="wuuk33fv"
-              >
-                <HiPhoto size={30} className={styles.photoIcon} />
-                <span style={{display:"flex", justifyContent:"center" , alignItems:"center"}}> Image </span>
-              </CldUploadButton>
+                {/* <CldUploadButton
+                className={styles.uploadContainer}
+                  options={{ maxFiles: 1 }}
+                  onSuccess={handleUpload}
+                  uploadPreset="wuuk33fv"
+                >
+                </CldUploadButton> */}
+                <button>
+                  <HiPlusCircle size={30} className={styles.photoIcon} />
+                  {/* <FileUpload name="attachment" url={'/api/upload'} multiple accept="image/*" maxFileSize={1000000} emptyTemplate={<p className="m-0">Drag and drop files to here to upload.</p>} /> */}
+                </button>
+                
+                <HiXCircle size={30} className={styles.photoIcon} />
+              <form
+                onSubmit={handleSubmit(onSubmit)}
+                className={styles.form}
+                >
+                  <input type="file" name="image" />
+                    <MessageInput
+                        id="caption"
+                        register={register}
+                        errors={errors}
+                        required 
+                        placeholder="Write a caption"
+                    />
+                    <button
+                        type="submit"
+                        className={styles.send}
+                    >
+                        <HiPaperAirplane
+                            size={18}
+                            className={styles.sendIcon}
+                        />
+                    </button>
+
+              </form>
             </Modal>
 
             
