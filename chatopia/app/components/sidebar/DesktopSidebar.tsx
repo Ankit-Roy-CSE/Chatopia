@@ -9,6 +9,9 @@ import styles from "./DesktopSidebar.module.css";
 import Avatar from "../Avatar";
 import DesktopItem from "./DesktopItem";
 import SettingsModal from "./SettingsModal"
+import { ThemeContext } from '@/app/context/ThemeContext'
+import { useContext } from 'react'
+import { Toggle } from "@/app/components/Toggle"
 
 
 interface DesktopSidebarProps {
@@ -20,6 +23,7 @@ const DesktopSidebar: React.FC<DesktopSidebarProps> = ({
 }) => {
     const routes = useRoutes();
     const [isOpen , setIsOpen] = useState(false);
+    const {isDark ,setIsDark} = useContext(ThemeContext);
 
     // console.log({ currentUser })
 
@@ -30,7 +34,7 @@ const DesktopSidebar: React.FC<DesktopSidebarProps> = ({
         isOpen={isOpen}
         onClose={() => setIsOpen(false)}
         />
-        <div className={styles.wrapper}>
+        <div className={styles.wrapper} data-theme={isDark ? "dark" : "light"}>
             <nav className={styles.navbar}>
                 <ul role="list" className={styles.list}>
                 {routes.map((item) => (
@@ -45,8 +49,9 @@ const DesktopSidebar: React.FC<DesktopSidebarProps> = ({
                 ))}
                 </ul>
             </nav>
-
+            
             <nav className={styles.accountNavbar}>
+            <Toggle />
             <div onClick={() => setIsOpen(true)} className={styles.avatarContainer}>
                 <Avatar user={currentUser} />
             </div>

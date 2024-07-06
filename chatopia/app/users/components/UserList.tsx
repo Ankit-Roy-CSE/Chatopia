@@ -2,7 +2,8 @@
 
 import { User } from "@prisma/client";
 import UserBox from "./UserBox";
-
+import { useContext } from 'react'
+import { ThemeContext } from '@/app//context/ThemeContext'
 import styles from './UserList.module.css';
 
 interface UserListProps {
@@ -10,9 +11,10 @@ interface UserListProps {
 };
 
 const UserList: React.FC<UserListProps> = ({items}) => {
+    const {isDark ,setIsDark} = useContext(ThemeContext);
   
     return (
-        <aside className={styles.wrapper}>
+        <aside className={styles.wrapper} data-theme={isDark ? "dark" : "light"}>
             <div className={styles.container}>
                 <div className={styles.header}>
                     <div>People</div>

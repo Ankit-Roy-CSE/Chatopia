@@ -8,7 +8,7 @@
     align-items: center; 
     border-radius: 0.5rem; 
     width: 100%; 
-    background-color: #ffffff; 
+    background-color: var(--bg-color); 
     transition-property: background-color, border-color, color, fill, stroke, opacity, box-shadow, transform;
     transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
     transition-duration: 300ms; 
@@ -16,7 +16,7 @@
 }
 
 .container:hover{
-    background-color: #f3f4f6; 
+    background-color: var(--fg-color); 
 }
 
 .userInfo{
@@ -40,5 +40,5 @@
     font-size: 0.875rem;
     line-height: 1.25rem; 
     font-weight: 500; 
-    color: #111827; 
+    color: var(--text-color); 
 }
