@@ -16,7 +16,7 @@ export default function RootLayout({children,}: Readonly<{children: React.ReactN
   return (
     <html lang="en">
       <ThemeProvider>
-        <body className={inter.className} >
+        <body >
           <AuthContext>
             <ToasterContext />
             {children}

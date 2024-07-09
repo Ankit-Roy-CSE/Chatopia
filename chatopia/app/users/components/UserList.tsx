@@ -4,6 +4,7 @@ import { User } from "@prisma/client";
 import UserBox from "./UserBox";
 import { useContext } from 'react'
 import { ThemeContext } from '@/app//context/ThemeContext'
+import { MdAddCircle } from "react-icons/md";
 import styles from './UserList.module.css';
 
 interface UserListProps {
@@ -19,11 +20,15 @@ const UserList: React.FC<UserListProps> = ({items}) => {
                 <div className={styles.header}>
                     <div>People</div>
                 </div>
-
+                <div className={styles.addMsgIcon}
+                    >
+                        <MdAddCircle size={20} />
+                </div>
+            </div>
                 {items.map((item) => (
                     <UserBox key={item.id} data={item}/>
                 ))}
-            </div>
+            
         </aside>
     );
 }
