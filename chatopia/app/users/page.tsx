@@ -4,6 +4,7 @@ import styles from './Users.module.css'
 import EmptyState from '../components/EmptyState'
 import { useContext } from 'react'
 import { ThemeContext } from '../context/ThemeContext'
+import RequestList from './components/RequestList'
 
 
 export default function Users(){
@@ -11,7 +12,7 @@ export default function Users(){
 
     return (
         <div className={styles.container} data-theme={isDark ? "dark" : "light"}>
-            <EmptyState />
+            {/* <EmptyState /> */}
         </div>
     )
 }

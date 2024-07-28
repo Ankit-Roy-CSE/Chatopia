@@ -2,7 +2,7 @@ import prisma from "@/app/libs/prismadb";
 import getCurrentUser from "./getCurrentUser";
 import getSession from "./getSession";
 
-const getUsers = async () => {
+const getUsers = async ( userIds : String[]) => {
   const session = await getSession();
 
   if (!session?.user?.email) {
@@ -15,23 +15,17 @@ const getUsers = async () => {
       return [];
     }
 
-    const { contacts } = currentUser ;
-
-
+    // Fetch users from the database
     const users = await prisma.user.findMany({
       where: {
-        email: {
-          in: contacts
+        id: {
+          in: userIds
         }
-      },
-      select: {
-        id: true,
-        email: true,
-        name: true
       }
     });
 
     return users;
+    
   } catch (error: any) {
     return [];
   }

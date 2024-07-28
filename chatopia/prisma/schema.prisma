@@ -29,6 +29,7 @@ model User {
   hashedPassword String?
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
+  contacts  String[] @default([])
 
   accounts Account[]
   messages Message[]
@@ -140,6 +141,11 @@ model Account {
   @@unique([provider, providerAccountId])
 }
 
-// model Active {
-//   email String @id
-// }
+model Request {
+  id String @id @default(uuid()) @db.Uuid
+  senderId String @db.Uuid
+  recverId String @db.Uuid
+  status String
+  createdAt DateTime @default(now())
+  @@unique([senderId, recverId])
+}

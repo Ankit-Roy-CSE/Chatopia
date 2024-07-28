@@ -1,7 +1,6 @@
 "use client"
 
 import { FieldErrors, FieldValues, UseFormRegister } from "react-hook-form";
-import {HiFaceSmile } from "react-icons/hi2";
 import styles from "./MessageInput.module.css";
 
 
