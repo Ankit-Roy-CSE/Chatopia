@@ -72,20 +72,23 @@ const Form = () => {
     return (
         <div className={styles.wrapper}>
             <Modal isOpen={isAttachmentVisible} onClose={()=>setIsAttachmentVisible(false)}>
-                {/* <CldUploadButton
-                className={styles.uploadContainer}
-                  options={{ maxFiles: 1 }}
-                  onSuccess={handleUpload}
-                  uploadPreset="wuuk33fv"
-                >
-                </CldUploadButton> */}
-                <button>
+              <CldUploadButton
+              className={styles.uploadContainer}
+                options={{ maxFiles: 1 }}
+                onSuccess={handleUpload}
+                uploadPreset="wuuk33fv"
+              >
+                <HiPhoto size={30} className={styles.photoIcon} />
+                <span style={{display:"flex", justifyContent:"center" , alignItems:"center"}}> Image </span>
+              </CldUploadButton>
+
+                {/* <button>
                   <HiPlusCircle size={30} className={styles.photoIcon} />
-                  {/* <FileUpload name="attachment" url={'/api/upload'} multiple accept="image/*" maxFileSize={1000000} emptyTemplate={<p className="m-0">Drag and drop files to here to upload.</p>} /> */}
+                  <FileUpload name="attachment" url={'/api/upload'} multiple accept="image/*" maxFileSize={1000000} emptyTemplate={<p className="m-0">Drag and drop files to here to upload.</p>} />
                 </button>
                 
-                <HiXCircle size={30} className={styles.photoIcon} />
-              <form
+                <HiXCircle size={30} className={styles.photoIcon} /> */}
+              {/* <form
                 onSubmit={handleSubmit(onSubmit)}
                 className={styles.form}
                 >
@@ -107,7 +110,7 @@ const Form = () => {
                         />
                     </button>
 
-              </form>
+              </form> */}
             </Modal>
 
             
