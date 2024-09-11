@@ -23,3 +23,19 @@ Create a Whatsapp Web Clone
 -   Authentication
 -   Self-Notification
 -   Notification Sound when Tab is Open
+
+## Installation
+- Clone this repository
+- Install all the dependencies by running this command
+```
+npm install
+```
+- Navigate to chatopia directoy
+```
+cd ./chatopia
+```
+- Run the development Server
+```
+npm run server
+```
+
