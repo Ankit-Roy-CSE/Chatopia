@@ -24,8 +24,11 @@ const RequestBox: React.FC<SentRequestBoxProps> = ({data ,  setData}) => {
             <div className={styles.userInfo}>
                 <div className={styles.info}>
                     <div>
-                        <p>
+                        <p style={{fontWeight:'bold' , fontSize:'1.2rem'}}>
                             {data.name}
+                        </p>
+                        <p>
+                            {data.email}
                         </p>
                     </div>
                     <div className={styles.actions}>

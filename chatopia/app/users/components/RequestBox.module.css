@@ -4,6 +4,7 @@
     padding: 0.75rem; 
     /* margin-left: 0.75rem; 
     margin-left: 0.875rem;  */
+    background-color: rgba(0,0,0,0.2);
     margin-top: 4px;
     align-items: center; 
     border-radius: 0.5rem; 
@@ -24,15 +25,22 @@
     min-width: 0; 
 }
 
+.info{
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+}
+
 .info:focus{
     outline: none; 
 }
 
-.info>div{
-    display: flex; 
+.info .details{
+    display: flex;
+    flex-direction: column;
     margin-bottom: 0.25rem; 
-    justify-content: space-between; 
-    align-items: center; 
+    justify-content: end; 
+    align-items: start; 
 }
 
 .info p{
@@ -41,4 +49,19 @@
     line-height: 1.25rem; 
     font-weight: 500; 
     color: var(--text-color); 
+}
+
+.actions{
+    display: flex;
+    flex-direction: row;
+    flex-grow: 1;
+    justify-content: end;
+    gap: 0.5rem;
+    align-content: center;
+    align-items: center;
+    margin-right: 0.5rem;
+}
+
+.actions button{
+    padding: 0.2rem 0.4rem;
 }
